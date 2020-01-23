@@ -1,0 +1,106 @@
+        \documentclass[a4paper,11pt,titlepage]{article}
+
+    % FONT settings
+        \usepackage[T1]{fontenc}
+        \usepackage[utf8]{inputenc}
+        \usepackage{lmodern}    % setting the font for the entire document  https://www.sharelatex.com/learn/Font_typefaces
+                                                                          % https://www.sharelatex.com/learn/Font_sizes,_families,_and_styles
+
+    % Packages for graphics and colors
+        \usepackage{graphicx}
+        \usepackage{epstopdf}
+
+        \usepackage[dvipsnames]{xcolor}   %\usepackage[usenames, dvipsnames]{color}
+        \usepackage{multicol}
+        \usepackage{tikz}
+
+
+        \usepackage[rightcaption]{sidecap}
+        \usepackage[font=scriptsize,labelfont=bf]{caption}
+        \usepackage[font=scriptsize,labelfont=bf]{subcaption}
+        
+        \usepackage{caption}
+        \DeclareCaptionLabelFormat{cont}{#1~#2}
+        \captionsetup[ContinuedFloat]{labelformat=cont}
+ 
+        \usepackage{booktabs}
+        
+        \usepackage{comment}
+
+
+    \usepackage[
+        pdftitle={Capital-skill complementarity and monetary policy}, 
+        pdfauthor={Gergő Motyovszki, EUI},
+        colorlinks=true,linkcolor=black,urlcolor=black,citecolor=myblue,bookmarks=true,
+        bookmarksopenlevel=2]{hyperref}
+
+    \usepackage{amsmath,amssymb,amsthm,textcomp}    % Math symbols: https://www.sharelatex.com/learn/List_of_Greek_letters_and_math_symbols
+                                                                    % http://www.rpi.edu/dept/arc/training/latex/LaTeX_symbols.pdf
+    \usepackage{enumerate}
+
+    % Document and page formatting   
+        \usepackage{geometry}                   % for page layout   ------ http://texdoc.net/texmf-dist/doc/latex/geometry/geometry.pdf
+            \geometry{total={210mm,297mm},                                  % https://www.sharelatex.com/learn/Page_size_and_margins
+            left=25mm,right=25mm,%
+            bindingoffset=0mm, top=25mm,bottom=25mm}
+
+        \usepackage{parskip}                    % for paragraph spacing ------ https://www.sharelatex.com/learn/Paragraph_formatting
+            \setlength{\parindent}{0cm}                        % paragraph indenting is set to zero by the package automatically
+            %\setlength{\parskip}{0.5cm plus4mm minus3mm}      % paragraph spacing is automatically taken care of by the package
+            \linespread{1.3}                                   % line spacing 1.3 for onehalf and 1.6 for double
+        
+        %\usepackage{setspace}
+
+        \usepackage[bottom]{footmisc}
+
+        \usepackage{enumitem}
+
+
+%% Other stuff
+
+    \newcommand{\linia}{\rule{\linewidth}{0.5pt}}
+
+
+
+\begin{document}
+
+
+        \begin{table}[t!]
+            \begin{center} \footnotesize
+                \begin{tabular}{l c  c || l c  c  }
+                    \hline      
+                    \multicolumn{3}{l}{\textbf{Parameters}}                                             &                                           &                   &                   \\
+                    separation rate, H          &$\sigma^H$         & $\input{numbers/sigma_H_base}$    &                                           &                   &                   \\  
+                    separation rate, L          &$\sigma^L$         & $\input{numbers/sigma_L_base}$    & capital intensity of skills               &   $\lambda$       &   $\input{numbers/lambda_base}$ \\    
+                    matching efficiency, H      &$\psi^{H}$         & $\input{numbers/psi_H_base}$      & substitutability bw $(N^H,K)$ and $N^L$   &   $\alpha$        &   $\input{numbers/alpha_base}$ \\ 
+                    matching efficiency, L      &$\psi^{L}$         & $\input{numbers/psi_L_base}$      & capital-skill complementarity             &   $\gamma$        &   $\input{numbers/gamma_base}$ \\ 
+                    matching elasticity         &$\varsigma$        & $\input{numbers/varsigma_base}$   & capital adjustment costs                  &   $\omega$        &   $\input{numbers/omega_base}$ \\ 
+                    population weigth, H        &$\varphi^H$        & $\input{numbers/varphi_H_base}$   & depreciation rate                         &   $\delta$        &   $\input{numbers/delta_base}$ \\ 
+                    population weigth, L        &$\varphi^L$        & $\input{numbers/varphi_L_base}$   & discount factor                           &   $\beta$         &   $\input{numbers/beta_base}$ \\  
+                    population weigth, E        &$\varphi^E$        & $\input{numbers/varphi_E_base}$   & (inverse) intertemporal elasticity        &   $\eta$          &   $\input{numbers/eta_base}$ \\   
+                    vacancy posting costs       & $\kappa$          & $\input{numbers/kappa_base}$      & labor supply elasticity parameter         &   $\xi$           &   $\input{numbers/xi_base}$ \\
+                    unemployment benefits, H    & $\varkappa^H$     & $\input{numbers/varkappa_H_base}$ & elasticity of substitution bw goods       &   $\epsilon$      &   $\input{numbers/epsilon_base}$ \\
+                    unemployment benefits, L    & $\varkappa^L$     & $\input{numbers/varkappa_L_base}$ & nominal rigidities (Calvo)                &   $\chi$          &   $\input{numbers/chi_base}$ \\
+                    TFP shock persistence       & $\rho_a$          & $\input{numbers/rho_a_base}$      & st.st. output share of government         &   $\Gamma$        &   $\input{numbers/GammaG_base}$ \\
+                    fiscal shock persistence    & $\rho_g$          & $\input{numbers/rho_g_base}$      & Taylor-coefficient on inflation           &   $\zeta^{\pi}$   &   $\input{numbers/zeta_pi_base}$ \\
+                    monetary shock persistence  & $\rho_R$          & $\input{numbers/rho_R_base}$      & Taylor-coefficient on output              &   $\zeta^{y}$     &   $\input{numbers/zeta_y_base}$ \\
+                    \hline
+                    \multicolumn{3}{l}{\textbf{Parameters targeting st.st.}}                        & \multicolumn{3}{l}{\textbf{Targeted steady states}}                           \\
+                    utility weight of leisure, H    & \textcolor{red}{$\Phi^H$}      & $\input{numbers/Phi_H_base}$      & participation rate, H & \textcolor{blue}{$partic^H$} & $\input{numbers/partic_H_base}$\\
+                    utility weight of leisure, L    & \textcolor{red}{$\Phi^L$}      & $\input{numbers/Phi_L_base}$      & participation rate, L & \textcolor{blue}{$partic^L$} & $\input{numbers/partic_L_base}$\\
+                    bargaining power, H             & \textcolor{red}{$\vartheta^H$} & $\input{numbers/vartheta_H_base}$ & unemployment rate, H  & \textcolor{blue}{$unemp^H$}  & $\input{numbers/unemp_H_base}$ \\
+                    bargaining power, L             & \textcolor{red}{$\vartheta^L$} & $\input{numbers/vartheta_L_base}$ & unemployment rate, L  & \textcolor{blue}{$unemp^L$}  & $\input{numbers/unemp_L_base}$ \\
+                    production subsidy              & \textcolor{red}{$\tau$}        & $\input{numbers/tau_base}$        & real marginal costs   & \textcolor{blue}{$x$}        & $\input{numbers/x_base}$ \\
+                    skill intensity of production   & \textcolor{red}{$\phi$}        & $\input{numbers/phi_base}$        & wage premium          & \textcolor{blue}{$w^H/w^L$}  & $\input{numbers/wprem_base}$ \\
+                    \hline
+                    \multicolumn{3}{l}{\textbf{Non targeted steady states}}                         &                           \\
+                    market tightness, H & \textcolor{purple}{$\theta^H$} & $\input{numbers/theta_H_base}$ & ratio of job finding rates & \textcolor{purple}{$\mu_t^H/\mu_t^L$} & $\input{numbers/mu_ratio_base}$ \\
+                    market tightness, L & \textcolor{purple}{$\theta^L$} & $\input{numbers/theta_L_base}$ &     &   &   \\
+                    \hline      
+                \end{tabular}
+            \end{center}
+            \caption{Parameters and selected steady state values. The 6 blue steady-state values are targeted by 6 red parameters.}
+            \label{stst_param}
+        \end{table}
+
+\end{document}  

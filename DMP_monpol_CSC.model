@@ -1,0 +1,534 @@
+% EUI - Monetary Policy and Inequality under Labor Market Frictions and Capital-Skill Complementarity
+% Juan Dolado, Gergo Motyovszki and Evi Pappa, European University Institute
+% codes by Gergõ Motyovszki, EUI, 2017
+
+% running the codes requires IRIS toolbox, 2015jan
+
+% This model files declares variables, parameters and dynamic equilibrium
+% conditions of the model in the IRIS model file language.
+
+%% Declare transition variables and shocks
+!transition_variables
+
+    % Search and Matching on the Labor Market (12)
+    'no. of matches - IH                         !! $m^{I,H}$'                             m_IH
+    'no. of matches - OH                         !! $m^{O,H}$'                             m_OH
+    'no. of matches - IL                         !! $m^{I,L}$'                             m_IL
+    'no. of matches - OL                         !! $m^{O,L}$'                             m_OL
+    'Labor market tightness - H                  !! $\theta^H$'                            theta_H
+    'Labor market tightness - L                  !! $\theta^L$'                            theta_L
+    'prob. of filling vacancies - H              !! $\gamma^{f,H}$'                        gamma_fH
+    'prob. of filling vacancies - L              !! $\gamma^{f,L}$'                        gamma_fL
+    'prob. of getting hired - IH                 !! $\gamma^{h,IH}$'                       gamma_hIH
+    'prob. of getting hired - OH                 !! $\gamma^{h,OH}$'                       gamma_hOH
+    'prob. of getting hired - IL                 !! $\gamma^{h,IL}$'                       gamma_hIL
+    'prob. of getting hired - OL                 !! $\gamma^{h,OL}$'                       gamma_hOL
+    
+    % Household (25)
+    'Leisure - H                                 !! ${l^H}$'                               l_H
+    'Leisure - L                                 !! ${l^L}$'                               l_L
+    'Employment - H                              !! ${n^H}$'                               n_H
+    'Employment - L                              !! ${n^L}$'                               n_L
+    'Unemployment - IH                           !! ${u^{I,H}}$'                           u_IH
+    'Unemployment - OH                           !! ${u^{O,H}}$'                           u_OH
+    'Unemployment - IL                           !! ${u^{I,L}}$'                           u_IL
+    'Unemployment - OL                           !! ${u^{O,L}}$'                           u_OL
+    
+    'Investment                                  !! ${i}$'                                 i
+    'Capital                                     !! ${k}$'                                 k
+    'Capital utilization                         !! ${z}$'                                 z
+    'Discount factor                             !! ${\beta}$'                             betat
+    
+    'Consumption - E                             !! ${c^E}$'                               c_E
+    'Consumption - H                             !! ${c^H}$'                               c_H
+    'Consumption - L                             !! ${c^L}$'                               c_L
+    'Real bonds - E                              !! ${b^L}$'                               bE
+    'Real bonds - H                              !! ${b^L}$'                               bH
+    'Real bonds - L                              !! ${b^L}$'                               bL
+    
+    'LM - c,E                                    !! ${\lambda^{c,E}}$'                     lambda_cE
+    'LM - c,H                                    !! ${\lambda^{c,H}}$'                     lambda_cH
+    'LM - c,L                                    !! ${\lambda^{c,L}}$'                     lambda_cL
+    'LM - n,H                                    !! ${\lambda^{n,H}}$'                     lambda_nH
+    'LM - n,L                                    !! ${\lambda^{n,L}}$'                     lambda_nL
+    'LM - u,H                                    !! ${\lambda^{u,H}}$'                     lambda_uH
+    'LM - u,H                                    !! ${\lambda^{u,L}}$'                     lambda_uL
+    
+    % Intermediate firms (7)
+    'Output                                      !! $y$'                                   y
+    'Vacancies - H                               !! $v^H$'                                 v_H
+    'Vacancies - L                               !! $v^L$'                                 v_L
+    'Aggregate eff. capital                      !! $K$'                                   K
+    'Marginal product of labor - H               !! $F^{n,H}$'                             F_nH
+    'Marginal product of labor - L               !! $F^{n,L}$'                             F_nL
+    'Marginal product of capital                 !! $F^{k}$'                               F_k
+    
+    % Prices (10)
+    'Nominal interest rate                       !! $R$'                                   R
+    'Capital rental rate                         !! $r$'                                   r
+    'Wage - H                                    !! $w^H$'                                 w_H
+    'Wage - L                                    !! $w^L$'                                 w_L
+    'Desired wage - H                            !! $w^H*$'                                wstar_H
+    'Desired wage - L                            !! $w^L*$'                                wstar_L
+    'Real marginal costs                         !! $x$'                                   x
+    'Inflation                                   !! $\Pi$'                                 Pi
+    'FF - NKPC                                   !! $FF$'                                  FF
+    'KK - NKPC                                   !! $KK$'                                  KK
+    
+    % Government (4)
+    'Taxes (lump sum)                            !! $T$'                                   T
+    'Taxes - E                                   !! $t^E$'                                 t_E
+    'Taxes - H                                   !! $t^H$'                                 t_H
+    'Taxes - L                                   !! $t^L$'                                 t_L
+    
+    % Aggregate variables (6)
+    'Aggr. employment - H                        !! $N^H$'                                 N_H
+    'Aggr. employment - L                        !! $N^L$'                                 N_L
+    'Aggr. unemployment - H                      !! $U^H$'                                 U_H
+    'Aggr. unemployment - L                      !! $U^L$'                                 U_L
+    'Aggr. consumption                           !! $C$'                                   C
+    'Aggr. investment                            !! $I$'                                   Inv
+    
+    
+    % Exogenous processes (6)
+    'Discount rate wedge                         !! $\psi$'                                psi
+    'TFP                                         !! $A$'                                   A
+    'Government expenditures                     !! $G$'                                   G
+    'Monetary policy wedge                       !! $v^R$'                                 v_R
+    'Investment shock                            !! $\Delta$'                              Delta
+    'Cost-push shock                             !! $q$'                                   qq
+    
+    % (1)
+    'log Inflation                               !! $\pi$'                                 pi
+    
+    % Extra measures to track (15)
+    partic_H
+    partic_L
+    partic
+    unemp_H
+    unemp_L
+    unemp
+    shrout_H
+    shrout_L
+    shrout
+    theta
+    wprem
+    rr
+    nonemp_H
+    nonemp_L
+    nonemp
+    
+    % Labour shares and relative prices (13)
+    skilled
+    ck
+    r_wH
+    ck_wL
+    r_wL
+    wH_wL
+    share_nH_skilled
+    share_k_skilled
+    share_skilled_y
+    share_nL_y
+    share_nH_y
+    share_k_y
+    rel_labor_share
+    
+    % Individual vars
+    profit
+    borrowing_H
+    borrowing_L
+    borrowing_E
+    net_tr_H
+    net_tr_L
+    net_tr_E
+
+    
+
+!transition_shocks
+    'Discount rate shock                         !! ${\varepsilon^{\psi}}$'                shock_psi
+    'TFP shock                                   !! ${\varepsilon^{a}}$'                   shock_a
+    'Gov. exp. shock                             !! ${\varepsilon^{g}}$'                   shock_g
+    'Monetary shock                              !! ${\varepsilon^{R}}$'                   shock_R
+    'Investment shock                            !! ${\varepsilon^{inv}}$'                 shock_inv
+    'Cost-push shock                             !! ${\varepsilon^{q}}$'                   shock_qq
+
+
+!log_variables
+    !all_but
+    pi 
+    bE 
+    bH 
+    bL
+    borrowing_H
+    borrowing_L
+    borrowing_E
+    profit
+    net_tr_H
+    net_tr_L
+    net_tr_E
+
+    
+
+%% Declare parameters
+!parameters
+
+    % Labor market frictions
+    'separation rate - H                            !! ${\sigma^H}$'                sigma_H
+    'separation rate - L                            !! ${\sigma^L}$'                sigma_L
+    'prob. of becoming outsider - H                 !! ${\mu^H}$'                   mu_H
+    'prob. of becoming outsider - L                 !! ${\mu^L}$'                   mu_L
+    'matching efficiency - IH                       !! ${\rho^{m,IH}}$'             rho_mIH
+    'matching efficiency - OH                       !! ${\rho^{m,OH}}$'             rho_mOH
+    'matching efficiency - IL                       !! ${\rho^{m,IL}}$'             rho_mIL
+    'matching efficiency - OL                       !! ${\rho^{m,OL}}$'             rho_mOL
+    'matching elasticity - H                        !! ${\alpha^H}$'                alpha_H
+    'matching elasticity - L                        !! ${\alpha^L}$'                alpha_L
+    
+    % Households
+    'personal discount factor                       !! ${\beta}$'                   beta
+    'intertemporal elast. of subst.                 !! ${\eta}$'                    eta
+    'Frisch elast. of labor supply                  !! ${\zeta}$'                   zeta
+    'weight of leisure in utility - H               !! ${\Phi^H}$'                  Phi_H
+    'weight of leisure in utility - L               !! ${\Phi^L}$'                  Phi_L
+    'share of high skilled                          !! ${\varphi^H}$'               varphi_H
+    'share of low skilled                           !! ${\varphi^L}$'               varphi_L
+    'share of entrepreneurs                         !! ${\varphi^E}$'               varphi_E
+    'capital adjustment costs                       !! ${\omega}$'                  omega
+    'depreciation rate                              !! ${\delta}$'                  delta
+    'elast. of depr. wrt utilization                !! ${\phi}$'                    phi
+    'external habits in consumption                 !! ${h}$'                       h
+    'portfolio adjustment costs                     !! ${\xi}$'                     xii
+    'st st bond holdings - H                        !! ${\hat b^H}$'                bH_hat
+    'st st bond holdings - L                        !! ${\hat b^L}$'                bL_hat
+    
+    % Intermediate firms
+    'vacancy costs - H                              !! ${\kappa^H}$'                kappa_H
+    'vacancy costs - L                              !! ${\kappa^L}$'                kappa_L
+    'prodfcn 1                                      !! ${s}$'                       SK
+    'skilled input intensity                        !! ${a^k}$'                     a_k
+    'capital intensity                              !! ${\lambda}$'                 lambda
+    'elasticity of subst bw N_L and N_H             !! ${\alpha}$'                  alpha
+    'elasticity of subst bw K and N_H               !! ${\gamma}$'                  gamma
+    'prodfcn 6                                      !! ${\varphi}$'                 varphi
+    'bargaining power of firms - H                  !! ${\vartheta^H}$'             vartheta_H
+    'bargaining power of firms - L                  !! ${\vartheta^L}$'             vartheta_L
+    
+    % Benchmark production fcn
+    'bench-prodfcn 1                                !! ${\sigma}$'                  sigma
+    'bench-prodfcn 2                                !! ${\xi}$'                     xi
+    'bench-prodfcn 3                                !! ${\nu}$'                     nu
+    
+    % Retailers
+    'elast. of subst. bw diff. goods                !! ${\epsilon}$'                epsilon
+    'Calvo price rigidities                         !! ${\chi}$'                    khi
+    'employment subsidy                             !! ${\tau}$'                    tau
+    
+    % Government
+    'unemployment benefits - H                      !! ${b^H}$'                     b_H
+    'unemployment benefits - L                      !! ${b^L}$'                     b_L
+    'stst government exp.                           !! ${\Gamma}$'                  Gamma
+    'interest rate smoothing                        !! ${\zeta^R}$'                 zeta_R
+    'monetary policy reaction to inflation          !! ${\zeta^{\pi}}$'             zeta_pi
+    'monetary policy reaction to output             !! ${\zeta^{y}}$'               zeta_y
+    'monetary policy reaction to output gap         !! ${\zeta^{x}}$'               zeta_x
+    'monetary policy reaction to tightness          !! ${\zeta^{\theta}}$'          zeta_theta
+    'monetary policy reaction to unemployment       !! ${\zeta^{u}}$'               zeta_u
+    
+    % Autoregressive parameters
+    'persistence of discount rate shock             !! ${\rho_{\psi}}$'             rho_psi
+    'persistence of TFP shock                       !! ${\rho_{a}}$'                rho_a
+    'persistence of gov. exp. shock                 !! ${\rho_{g}}$'                rho_g
+    'persistence of monetary shock                  !! ${\rho_{R}}$'                rho_R
+    'persistence of investment shock                !! ${\rho_{inv}}$'              rho_inv
+    'persistence of cost-push shock                 !! ${\rho_{q}}$'                rho_qq
+    
+    'wage rigidity/persistence - H                  !! ${\rho_w^H}$'                rho_wH
+    'wage rigidity/persistence - L                  !! ${\rho_w^L}$'                rho_wL
+    
+    % Steady state coefficients
+    ybar
+    Rbar
+    Pibar
+    ubar
+    xbar
+    thetabar
+    
+    
+
+%% Equations of the model
+!transition_equations
+
+    % --------- Search and matching on the labor market -------------------
+
+    % 1,2,3,4) matching equations
+    m_IH = rho_mIH * v_H^(alpha_H) * (U_H)^(1-alpha_H)  ;
+    m_IL = rho_mIL * v_L^(alpha_L) * (U_L)^(1-alpha_L)  ;
+    m_OH = 1;   %rho_mOH * v_H^(alpha_H) * u_OH^(1-alpha_H)  ;
+    m_OL = 1;   %rho_mOL * v_L^(alpha_L) * u_OL^(1-alpha_L)  ;
+    
+    % 5,6) labor market tightness
+    theta_H = v_H / U_H;
+    theta_L = v_L / U_L;
+    
+    % 7,8) vacancy filling probabilities
+    gamma_fH =  m_IH   / v_H;
+    gamma_fL =  m_IL   / v_L;
+    
+    % 9,10,11,12) probabilities of getting hired
+    gamma_hIH = m_IH / U_H;     %gamma_hIH = m_IH / u_IH{-1};
+    gamma_hOH = 1;              %gamma_hOH = m_OH / u_OH;
+    gamma_hIL = m_IL / U_L;     %gamma_hIL = m_IL / u_IL{-1};
+    gamma_hOL = 1;              %gamma_hOL = m_OL / u_OL;
+        
+    % 13,14) law of motion for employment
+    N_H = (1-sigma_H) * N_H{-1} + m_IH;
+    N_L = (1-sigma_L) * N_L{-1} + m_IL;
+    
+    % 15,16) outsider unemployment - not used any more
+    u_OH = 1;   %u_IH = sigma_H * n_H{-1} + (1-mu_H) * u_IH{-1} - m_IH;
+    u_OL = 1;   %u_IL = sigma_L * n_L{-1} + (1-mu_L) * u_IL{-1} - m_IL;
+
+    
+    % ------------- Entrepreneurs ------------------------
+    
+    % 17) capital law of motion
+    k = (1 - delta*(z^phi) )*k{-1} + i - omega/2 * (k/k{-1} - 1)^2 * k{-1};
+    
+    % 18) time varying discount factor
+    betat = beta * psi;
+    %betat = beta;
+    
+    % 19) FOC wrt c_E (marginal utility)
+    (c_E - h*c_E{-1})^(-eta) = lambda_cE;
+    
+    % 20) FOC wrt k{+1}
+    lambda_cE  * Delta * ( 1 + omega*( k/k{-1} - 1 )    ) = betat * lambda_cE{+1} * ( r{+1}*z{+1} + Delta{+1}* (1 - delta*(z{+1})^phi +  omega/2 * ( (k{+1}/k)^2 - 1 ) )  );
+    
+    % 21) FOC wrt B_E (Euler)
+    lambda_cE = betat * lambda_cE{+1} * R / Pi{+1};
+    
+    % 22) FOC wrt z
+    !if zz==1
+        r = Delta * delta * phi * z^(phi-1);
+    !else
+        z = 1;
+    !end
+    
+    % ------------- Workers ------------------------
+    
+    % 23,24) use of time for workers
+    1   = n_H{-1} + u_IH  + l_H;
+    1   = n_L{-1} + u_IL  + l_L;
+    
+    % 25,26) budget constraints of workers
+    !if market == 3
+        % under complete markets asset portfolio is not a state variable
+        c_H + t_H + bH{+1} = w_H*n_H{-1} + R/Pi * bH + b_H*u_IH;
+        c_L + t_L + bL{+1} = w_L*n_L{-1} + R/Pi * bL + b_L*u_IL;
+    !else
+        c_H + t_H + bH = w_H*n_H{-1} + R{-1}/Pi * bH{-1} + b_H*u_IH;
+        c_L + t_L + bL = w_L*n_L{-1} + R{-1}/Pi * bL{-1} + b_L*u_IL;
+    !end
+    
+    % 27,28) FOC wrt c_k (marginal utilities)
+    (c_H - h*c_H{-1})^(-eta) = lambda_cH;
+    (c_L - h*c_L{-1})^(-eta) = lambda_cL;
+    
+    % 29,30) FOC wrt B_E (Eulers)
+    !if market == 2
+        % general incomplete markets
+        lambda_cH * (1+xii*( bH - bH_hat )) = betat * lambda_cH{+1} * R / Pi{+1};
+        lambda_cL * (1+xii*( bL - bL_hat )) = betat * lambda_cL{+1} * R / Pi{+1};
+    !elseif market == 1
+        % financial autarky
+        bH = $bH;
+        bL = $bL;
+    !elseif market == 3
+        % complete markets, perfect risk sharing
+        lambda_cH/lambda_cE  = $lambda_cH/$lambda_cE;
+        lambda_cL/lambda_cE  = $lambda_cL/$lambda_cE;
+    !else
+    !end
+    
+    % 31,32) FOCs wrt u_k
+    lambda_nH = (Phi_H * (l_H)^(-zeta) - b_H*lambda_cH  ) / gamma_hIH;
+    lambda_nL = (Phi_L * (l_L)^(-zeta) - b_L*lambda_cL  ) / gamma_hIL;
+    
+    % 33,34) FOCs wrt n_k{+1}
+    lambda_nH = betat * ( lambda_cH{+1}*w_H{+1} + (1-sigma_H)*lambda_nH{+1}  - Phi_H*(l_H{+1})^(-zeta)      );
+    lambda_nL = betat * ( lambda_cL{+1}*w_L{+1} + (1-sigma_L)*lambda_nL{+1}  - Phi_L*(l_L{+1})^(-zeta)      );
+    
+    % 35, 36) FOCs wrt u_Ik{+1}
+    lambda_uH = 1;  %betat * ( b_H*lambda_c{+1} + lambda_nH{+1}*gamma_hIH{+1} + lambda_uH{+1}*(1 - mu_H - gamma_hIH{+1} ) - Phi_H*(l_H{+1})^(-zeta)    );
+    lambda_uL = 1;  %betat * ( b_L*lambda_c{+1} + lambda_nL{+1}*gamma_hIL{+1} + lambda_uL{+1}*(1 - mu_L - gamma_hIL{+1} ) - Phi_L*(l_L{+1})^(-zeta)    );
+    
+    
+    % ------------------ Intermediate firm -----------------
+    
+    % 37) Capital demand
+    r = x * F_k;
+    
+    % 38,39) Labor demands
+    kappa_H / gamma_fH = betat * lambda_cE{+1}/lambda_cE * ( x{+1} * F_nH{+1} - w_H{+1} + (1-sigma_H)*kappa_H/gamma_fH{+1}  )  ;
+    kappa_L / gamma_fL = betat * lambda_cE{+1}/lambda_cE * ( x{+1} * F_nL{+1} - w_L{+1} + (1-sigma_L)*kappa_L/gamma_fL{+1}  )  ;  
+    
+    !if prodfcn == 1
+        % 40) production function
+        y                             =  SK^(1-varphi) * A * ( a_k * (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(alpha/gamma)  + (1-a_k)*(N_L{-1})^(alpha)  )^(1/alpha*varphi) ;
+
+        % 41,42,43) marginal products
+        F_nH = a_k *(1-lambda) * varphi* SK^(1-varphi) * A * ( a_k * (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(alpha/gamma)  + (1-a_k)*(N_L{-1})^(alpha)  )^(1/alpha*varphi - 1) * ...
+                                                                     (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^((alpha-gamma)/gamma) * (N_H{-1})^(gamma-1);
+        F_k  = a_k * lambda    * varphi* SK^(1-varphi) * A * ( a_k * (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(alpha/gamma)  + (1-a_k)*(N_L{-1})^(alpha)  )^(1/alpha*varphi - 1) * ...
+                                                                     (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^((alpha-gamma)/gamma) * K^(gamma-1);
+        F_nL = (1-a_k)         * varphi* SK^(1-varphi) * A * ( a_k * (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(alpha/gamma)  + (1-a_k)*(N_L{-1})^(alpha)  )^(1/alpha*varphi - 1) * (N_L{-1})^(alpha-1);
+        
+    !elseif prodfcn == 2
+        % 40) production function
+        y                             =  SK * A * ( a_k * (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(alpha/gamma)  + (1-a_k)*(N_L{-1})^(alpha)  )^(1/alpha*varphi) ;
+
+        % 41,42,43) marginal products
+        F_nH = a_k *(1-lambda) * varphi* SK * A * ( a_k * (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(alpha/gamma)  + (1-a_k)*(N_L{-1})^(alpha)  )^(1/alpha*varphi - 1) * ...
+                                                                     (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^((alpha-gamma)/gamma) * (N_H{-1})^(gamma-1);
+        F_k  = a_k * lambda    * varphi* SK * A * ( a_k * (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(alpha/gamma)  + (1-a_k)*(N_L{-1})^(alpha)  )^(1/alpha*varphi - 1) * ...
+                                                                     (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^((alpha-gamma)/gamma) * K^(gamma-1);
+        F_nL = (1-a_k)         * varphi* SK * A * ( a_k * (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(alpha/gamma)  + (1-a_k)*(N_L{-1})^(alpha)  )^(1/alpha*varphi - 1) * (N_L{-1})^(alpha-1);
+        
+    !elseif prodfcn == 0
+        % 40) production function
+        y                         =  A * K^sigma     * ( xi*(N_H{-1})^nu + (1-xi)*(N_L{-1})^nu  )^((1-sigma)/nu) ;
+
+        % 41,42,43) marginal products
+        F_nH =  (1-sigma)*xi     *   A * K^sigma     * ( xi*(N_H{-1})^nu + (1-xi)*(N_L{-1})^nu  )^((1-sigma-nu)/nu) * (N_H{-1})^(nu-1) ;
+        F_k  =  sigma            *   A * K^(sigma-1) * ( xi*(N_H{-1})^nu + (1-xi)*(N_L{-1})^nu  )^((1-sigma)/nu) ;
+        F_nL =  (1-sigma)*(1-xi) *   A * K^sigma     * ( xi*(N_H{-1})^nu + (1-xi)*(N_L{-1})^nu  )^((1-sigma-nu)/nu) * (N_L{-1})^(nu-1);
+    
+    !else
+    !end
+    
+    % 44,45) wage bargaining
+    wstar_H = (1-vartheta_H) * (x*F_nH + (1-sigma_H)*kappa_H/gamma_fH  )  + vartheta_H/lambda_cH * ( Phi_H*(l_H)^(-zeta) - (1-sigma_H)*lambda_nH  );
+    wstar_L = (1-vartheta_L) * (x*F_nL + (1-sigma_L)*kappa_L/gamma_fL  )  + vartheta_L/lambda_cL * ( Phi_L*(l_L)^(-zeta) - (1-sigma_L)*lambda_nL  );
+    
+    
+    % ---------------- Retail firms ----------------------------
+    
+    
+    % 46) evolution of prices
+    !if nkpc == 1
+        KK/FF = ( (1-khi*Pi^(epsilon-1) ) / (1-khi)   )^(1/(1-epsilon));
+    !elseif nkpc == 0
+        pi = beta * pi{+1} + (1-khi)*(1-beta*khi)/khi * log(x);
+    !else
+    !end
+    
+    % 47,48) KK, FF
+    KK = y* (c_E - h*c_E{-1})^(-eta) * (x*qq ) * (1-tau)*epsilon/(epsilon-1) + khi*betat * (Pi{+1})^epsilon     * KK{+1};
+    FF = y* (c_E - h*c_E{-1})^(-eta)                                   + khi*betat * (Pi{+1})^(epsilon-1) * FF{+1};
+    
+    
+    % --------------- Government policies ------------------
+    
+    % 49) government budget
+    T = b_H * (U_H ) + b_L * (U_L ) + G + tau*x*y;
+    
+    % 50,51,52) taxes
+    T = varphi_E * t_E + varphi_H * t_H + varphi_L * t_L;
+    t_H = T;
+    t_L = T;
+    
+    % 53) monetary policy - Taylor rule
+    R/Rbar = (R{-1}/Rbar)^zeta_R * (Pi/Pibar)^zeta_pi * (y/ybar)^zeta_y  * (x/xbar)^zeta_x * (unemp/ubar)^(-zeta_u) * (theta/thetabar)^zeta_theta * v_R;
+    %R/Rbar =                       (Pi/Pibar)^zeta_pi * (y/ybar)^zeta_y * v_R;
+    
+    
+    % ----------------- Aggregate variables and market clearing ---------------------------
+    
+    % 54-60) aggregation
+    C = varphi_E*c_E + varphi_H*c_H + varphi_L*c_L;
+    Inv = varphi_E * i;
+    U_H = varphi_H*u_IH;
+    U_L = varphi_L*u_IL;
+    N_H = varphi_H*n_H;
+    N_L = varphi_L*n_L;
+    K = varphi_E*z*k{-1};
+    
+    % 61) goods market clearing
+    y = C + Delta* Inv + G + kappa_H*v_H + kappa_L*v_L;
+    
+    % 62) bonds market clearing
+    0 = varphi_E*bE + varphi_H*bH + varphi_L*bL;
+    
+    
+    % ------------------ Exogenous processes --------------------------
+    
+    % 63,64,65,66,67,68)
+    psi = (psi{-1})^rho_psi * exp(shock_psi);
+    A   = (A{-1})^rho_a     * exp(shock_a);
+    G   = (ybar*Gamma)^(1-rho_g) * (G{-1})^rho_g     * exp(shock_g);
+    v_R = (v_R{-1})^rho_R   * exp(shock_R);
+    Delta = (Delta{-1})^rho_inv * exp(shock_inv);
+    qq = (qq{-1})^rho_qq   * exp(shock_qq);
+    
+    % 69)
+    pi = log(Pi);
+    
+    % --------------- Extra measures to track -----------------------
+    % 70-80) labor market indicators
+    partic_H = (N_H{-1} + U_H  ) / varphi_H;
+    partic_L = (N_L{-1} + U_L  ) / varphi_L;
+    partic   = 1 - varphi_H*l_H - varphi_L*l_L;
+    
+    unemp_H = (U_H   ) / (N_H{-1} + U_H   );
+    unemp_L = (U_L   ) / (N_L{-1} + U_L   );
+    unemp   = (U_H + U_L   ) / partic;
+    
+    shrout_H = 1;   %u_OH / (u_IH + u_OH );
+    shrout_L = 1;   %u_OL / (u_IL + u_OL );
+    shrout   = 1;   %(u_OH + u_OL) / (u_IH + u_OH + u_IL + u_OL );
+    
+    theta    = (v_H + v_L) / (U_H  + U_L  );
+    wprem    = w_H / w_L;
+    
+    % 81) ex ante real interest rate
+    rr = R/Pi{+1};
+    
+    %82-84)
+    nonemp_H = l_H + u_IH  ;
+    nonemp_L = l_L + u_IL ;
+    nonemp = 1 - N_H{-1} - N_L{-1} - varphi_E;
+
+    %85-86)
+    w_H = rho_wH * w_H{-1} + (1-rho_wH) * wstar_H;
+    w_L = rho_wL * w_L{-1} + (1-rho_wL) * wstar_L;
+    
+    %87-99) income shares and relative prices
+    skilled = (lambda*K^(gamma) + (1-lambda)*(N_H{-1})^(gamma)  )^(1/gamma);
+    ck = (r*K + w_H*N_H{-1})/skilled;
+    r_wH = r / w_H;
+    ck_wL = ck / w_L;
+    r_wL = r / w_L;
+    wH_wL = wprem;
+    share_nH_skilled = w_H*N_H{-1} / ( r*K + w_H*N_H{-1} );
+    share_k_skilled = r*K / ( r*K + w_H*N_H{-1} );
+    share_skilled_y = ck*skilled / (ck*skilled + w_L*N_L{-1} ); 
+    share_nL_y =  w_L*N_L{-1} / (ck*skilled + w_L*N_L{-1} );
+    share_nH_y =  w_H*N_H{-1} / (ck*skilled + w_L*N_L{-1} );
+    share_k_y  =  r * K      / (ck*skilled + w_L*N_L{-1} );
+    rel_labor_share = w_H*N_H{-1} / (w_L*N_L{-1}) ;
+    
+    %100-106)
+    profit = (1-(1-tau)*x)*y/varphi_E;
+    !if market == 3
+        borrowing_H = bH*(1+rr) - bH{+1};
+        borrowing_L = bL*(1+rr) - bL{+1};
+        borrowing_E = bE*(1+rr) - bE{+1};
+    !else
+        borrowing_H = bH{-1}*(1+rr{-1}) - bH;
+        borrowing_L = bL{-1}*(1+rr{-1}) - bL;
+        borrowing_E = bE{-1}*(1+rr{-1}) - bE;
+   !end
+   net_tr_H = b_H*u_IH - t_H;
+   net_tr_L = b_L*u_IL - t_L;
+   net_tr_E = tau*x*y/varphi_E - t_E;
+    
