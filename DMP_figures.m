@@ -12,7 +12,7 @@
     clear all
     clc
     
-    % Loading IRIS Toolbox
+    % Loading IRIS Toolbox -- only needed if has not been loaded yet in the current Matlab session
 %         currentfolder = fileparts(which('DMP_figures.m'));
 %         irisfolder = [currentfolder '\IRIS_Tbx_20150127'];
 %         addpath(genpath(irisfolder));

@@ -11,11 +11,11 @@
     clc
     
         % Loading IRIS Toolbox
-%         currentfolder = fileparts(which('DMP_figures.m'));
-%         irisfolder = [currentfolder '\IRIS_Tbx_20150127'];
-%         addpath(genpath(irisfolder));
-% 
-%         irisstartup
+        currentfolder = fileparts(which('DMP_figures.m'));
+        irisfolder = [currentfolder '\IRIS_Tbx_20150127'];
+        addpath(genpath(irisfolder));
+
+        irisstartup
     
     irisrequired('20150127');
     
