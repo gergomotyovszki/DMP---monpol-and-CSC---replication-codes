@@ -10,14 +10,18 @@
     clear all
     clc
     
-        % Loading IRIS Toolbox
-        currentfolder = fileparts(which('DMP_figures.m'));
+    % Loading IRIS Toolbox
+        currentfolder = fileparts(which('DMP_monpol_CSC_main.m'));
         irisfolder = [currentfolder '\IRIS_Tbx_20150127'];
         addpath(genpath(irisfolder));
 
-        irisstartup
+        irisstartup     % this command starts an IRIS session
     
-    irisrequired('20150127');
+        irisrequired('20150127');
+        
+        % For detailed documentation on IRIS toolbox, type the command 
+        % " irisman " into the command window after an IRIS session has been started, 
+        % which will bring up the pdf manual
     
     
 %% Parameters

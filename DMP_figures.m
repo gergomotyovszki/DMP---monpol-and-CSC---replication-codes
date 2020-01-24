@@ -398,7 +398,7 @@
         end
     end
     
-    return
+    
     
 %% Figure types w1 and w2 - Wage equation decomposition
 
