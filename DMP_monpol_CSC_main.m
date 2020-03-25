@@ -12,7 +12,7 @@
     
     % Loading IRIS Toolbox
         currentfolder = fileparts(which('DMP_monpol_CSC_main.m'));
-        irisfolder = [currentfolder '\IRIS_Tbx_20150127'];
+        irisfolder = [currentfolder '/IRIS_Tbx_20150127'];
         addpath(genpath(irisfolder));
 
         irisstartup     % this command starts an IRIS session
